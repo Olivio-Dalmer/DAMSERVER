@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://user.soap.xml"
+	targetNamespace="http://user.soap.xml"
+	elementFormDefault="qualified"
+>
+
+  <!-- DEFININDO O CABEÇALHO DA REQUEST -->
+  <xs:complexType name="HeaderType">
+    <xs:sequence>
+      <xs:element name="token" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+
+  <!-- HEADER REQUEST" -->
+  <xs:element name="HeaderRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="header" type="tns:HeaderType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- RESPONSE LISTA DE USERS " -->
+  <xs:element name="UserListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="estado" type="xs:boolean" />
+        <xs:element name="mensagem" type="xs:string" />
+        <xs:element name="users" type="tns:User" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- DADOS DO GET USER FOR ID RESQUEST " -->
+  <xs:element name="UserForIdRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Header" type="tns:HeaderType" />
+        <xs:element name="Body">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="userId" type="xs:long" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+
+
+  <!-- DADOS DO LOGIN REQUEST CICLISTA" -->
+  <xs:element name="CiclistaLoginRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="email" type="xs:string" />
+        <xs:element name="password" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- DADOS DO LOGIN REQUEST ADMINISTRADOR" -->
+  <xs:element name="GestorLoginRequest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="email" type="xs:string" />
+        <xs:element name="password" type="xs:string" />
+        <xs:element name="tipo" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- DADOS DO USER RESPONSE" -->
+  <xs:element name="UserResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="erro" type="xs:boolean" />
+        <xs:element name="mensagem" type="xs:string" />
+        <xs:element name="dadosUser" type="tns:User" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- DADOS DO USER REQUEST" -->
+  <xs:complexType name="UserCreat">
+    <xs:sequence>
+      <xs:element name="password" type="xs:string" />
+      <xs:element name="nome" type="xs:string" />
+      <xs:element name="sobrenome" type="xs:string" />
+      <xs:element name="genero" type="xs:string" />
+      <xs:element name="BI" type="xs:string" />
+      <xs:element name="email" type="xs:string" />
+      <xs:element name="dataNascimento" type="xs:dateTime" />
+      <xs:element name="telefone" type="xs:string" />
+      <xs:element name="foto" type="xs:string" />
+      <xs:element name="tipo" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+
+
+    <!-- DADOS DO CICLISTA CREAT REQUEST" -->
+  <xs:element name="CiclistaCreat">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="userCreat" type="tns:UserCreat"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- DADOS DO USER UPDATE REQUEST" -->
+  <xs:element name="UserUpdateRequest">
+    <xs:complexType>
+      <xs:sequence>
+      <xs:element name="id" type="xs:long" />
+      <xs:element name="nome" type="xs:string" />
+      <xs:element name="sobrenome" type="xs:string" />
+      <xs:element name="genero" type="xs:string" />
+      <xs:element name="BI" type="xs:string" />
+      <xs:element name="email" type="xs:string" />
+      <xs:element name="dataNascimento" type="xs:dateTime" />
+      <xs:element name="telefone" type="xs:string" />
+      <xs:element name="foto" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- DADOS DO USER UPDATE PASSWORD REQUEST" -->
+  <xs:element name="UserUpdatePasswordRequest">
+    <xs:complexType>
+      <xs:sequence>
+      <xs:element name="id" type="xs:long" />
+      <xs:element name="password" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+
+  <!-- DADOS DO USER" -->
+  <xs:complexType name="User">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long" />
+      <xs:element name="password" type="xs:string" />
+      <xs:element name="nome" type="xs:string" />
+      <xs:element name="sobrenome" type="xs:string" />
+      <xs:element name="genero" type="xs:string" />
+      <xs:element name="BI" type="xs:string" />
+      <xs:element name="email" type="xs:string" />
+      <xs:element name="dataNascimento" type="xs:dateTime" />
+      <xs:element name="telefone" type="xs:string" />
+      <xs:element name="foto" type="xs:string" />
+      <xs:element name="tipo" type="xs:int" />
+      <xs:element name="token" type="xs:string" />
+      <xs:element name="dateCreated" type="xs:dateTime"/>
+      <xs:element name="dateUpdated" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- DADOS DO USER CLIENT RESPONSE -->
+  <xs:element name="UserClientResponse">
+    <xs:complexType>
+      <xs:sequence>
+      <xs:element name="id" type="xs:long" />
+      <xs:element name="idUser" type="xs:long" />
+      <xs:element name="saldo" type="xs:double" />
+      <xs:element name="dadosUser" type="tns:User"/>
+      <xs:element name="isDevedor" type="xs:boolean" />
+      <xs:element name="erro" type="xs:boolean" />
+      <xs:element name="mensagem" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+    <!-- DADOS DO USER GESTOR CREAT -->
+  <xs:complexType name="GestorCreat">
+    <xs:sequence>
+      <xs:element name="idEstacao" type="xs:long" />
+      <xs:element name="userCreat" type="tns:UserCreat"/>
+    </xs:sequence>
+  </xs:complexType>
+
+    <!-- DADOS DO USER GESTOR RESPONSE -->
+  <xs:complexType name="UserGestorResponse">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long" />
+      <xs:element name="idUser" type="xs:long" />
+      <xs:element name="idEstacao" type="xs:long" />
+      <xs:element name="dadosUser" type="tns:User"/>
+      <xs:element name="erro" type="xs:boolean" />
+      <xs:element name="mensagem" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- STRUCTS ALL USERS" -->
+  <!--    -->  
+  <!-- USER TYPE TO LIST -->
+  <xs:complexType name="UserToListType">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long" />
+      <xs:element name="password" type="xs:string" />
+      <xs:element name="nome" type="xs:string" />
+      <xs:element name="sobrenome" type="xs:string" />
+      <xs:element name="genero" type="xs:string" />
+      <xs:element name="BI" type="xs:string" />
+      <xs:element name="email" type="xs:string" />
+      <xs:element name="dataNascimento" type="xs:dateTime" />
+      <xs:element name="telefone" type="xs:string" />
+      <xs:element name="foto" type="xs:string" />
+      <xs:element name="tipo" type="xs:string" />
+      <xs:element name="dateCreated" type="xs:dateTime"/>
+      <xs:element name="dateUpdated" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- RESPONSE ALL USER LIST -->
+  <xs:element name="UsersListResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="estado" type="xs:boolean" />
+        <xs:element name="mensagem" type="xs:string" />
+        <xs:element name="users" type="tns:UserToListType" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- EMAIL  USER REQUEST -->
+  <xs:element name="EmailUserRequest">
+    <xs:complexType>
+      <xs:sequence>
+      <xs:element name="email" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+</xs:schema>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="http://soap.xml"
+	targetNamespace="http://soap.xml"
+	elementFormDefault="qualified"
+>
+
+
+  <!-- RESPONSE DA GET ESTAÇÃO" -->
+  <xs:element name="GetStationResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="estado" type="xs:boolean" />
+        <xs:element name="mensagem" type="xs:string" />
+        <xs:element name="id" type="xs:long" />
+        <xs:element name="name" type="xs:string" />
+        <xs:element name="bonus" type="xs:int" />
+        <xs:element name="localName" type="xs:string" />
+        <xs:element name="latitude" type="xs:float" />
+        <xs:element name="longitude" type="xs:float" />
+        <xs:element name="dockItem" type="tns:DockType" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- RESQUEST GET ESTAÇÃO -->
+  <xs:element name="GetStationRequest">
+    <xs:complexType>
+      <xs:sequence>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- ESTRUTURA DA DOCAS -->
+  <xs:complexType name="DockType">
+    <xs:sequence>
+      <xs:element name="idDock" type="xs:long" />
+      <xs:element name="reference" type="xs:string" />
+      <xs:element name="state" type="xs:int" />
+      <xs:element name="info" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+
+    <!-- ESTRUTURA PARA REQUEST PARA ALTERAR O ESTADO DA DOCA  -->
+    <xs:element name="AlterStateDockBikeRequest">
+      <xs:complexType>
+        <xs:sequence>
+            <xs:element name="idDock" type="xs:long" />
+            <xs:element name="state" type="xs:int" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:element>
+
+    <!-- ESTRUTURA PARA RESPONSE ALTER ESTADO DA DOCA -->
+    <xs:element name="AlterStateDockBikeResponse">
+      <xs:complexType>
+        <xs:sequence>
+            <!-- name of dock -->
+            <xs:element name="estado" type="xs:boolean" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:element>
+
+</xs:schema>

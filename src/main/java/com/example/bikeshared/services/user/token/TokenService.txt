@@ -1,0 +1,107 @@
+package com.example.bikeshared.services.token;
+
+
+
+import org.springframework.beans.factory.annotation.Value;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
+import javax.annotation.PostConstruct;
+import javax.management.RuntimeErrorException;
+
+import java.security.Key;
+import java.util.Date;
+import org.springframework.stereotype.Service;
+
+@Service
+public class TokenService {
+
+    private Key keyToken;
+
+    // PERMITE ATRIBUIR UMA CHAVE VIA APLICATION.PROPERTIES
+    @Value("${jwt.secret}")
+    private String SECRET_KEY;;
+
+    // CONVERTE A STRING PARA UMA KEY
+    @PostConstruct
+    public void conversionStringToKey() {
+        System.out.println("INICIANDO CONVERT: " + SECRET_KEY);
+        try {
+            if (SECRET_KEY == null || SECRET_KEY.isEmpty()) {
+                throw new RuntimeException("A chave secreta não está definida ou está vazia.");
+            }
+            System.out.println("SECRET_KEY: " + SECRET_KEY);
+            this.keyToken = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+            System.out.println("Chave convertida com sucesso.");
+        } catch (Exception e) {
+            System.out.println("Erro na conversão da chave: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeErrorException(null, "Erro na conversão da chave: " + e.getMessage());
+        }
+    }
+
+
+
+    // CALCULAR TEMPO DE EXPIRAÇÃO EM MILISEGUNDOS:
+    private long timeExpForDays(int qtdDays){
+        if (qtdDays < 1) 
+        return 24 * 60 * 60 * 1000;
+        return qtdDays *  24 * 60 * 60 * 1000;
+    }
+
+
+    // MÉTODO PARA GERAR O TOKEN DO USER
+    public String generateToken(String email) {
+        try {
+        // Obtém o tempo atual em milissegundos
+        long currentTime = System.currentTimeMillis();
+        // Cria um objeto Date com o tempo atual 
+        Date now = new Date(currentTime); 
+        // Define o tempo de expiração do token (se paramentro for menor que 1, o token expira em 1 dia)
+        long expInMillis = currentTime + timeExpForDays(0);
+        // Cria um objeto Date com o tempo de expiração
+        Date exp = new Date(expInMillis); 
+        // Constrói o token JWT
+        return Jwts.builder()
+                .setSubject(email) // Define o assunto (email) do token
+                .setIssuedAt(now) // Define a data de emissão do token
+                .setExpiration(exp) // Define a data de expiração do token
+                .signWith(keyToken) // Assina o token com a chave secreta
+                .compact(); // Compacta o token em uma string
+        } catch (JwtException e) {
+            System.out.println("ERRO AO GERAR O TOKEN DO USUÁRIO" + e);
+            throw new RuntimeErrorException(null, "EXC: " + e);
+        }
+    }
+
+
+
+    
+    // MÉTODO PARA VERIFICAR A VALIDADE DO TOKEN DO USUÁRIO
+    public boolean validateToken(String token) {
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(keyToken)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            System.out.println("DADOS DO TOKEN" + claims.getSubject());            
+            return true;
+        } catch (ExpiredJwtException e) {
+        
+            System.out.println("TOKEN EXPIRADO");
+            return false;
+        } catch (Exception e) {
+            System.out.println("ERRO EXC: " + e);
+            return false;
+        }
+    }
+
+
+
+
+
+
+}
